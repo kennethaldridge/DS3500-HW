@@ -14,13 +14,13 @@ import seaborn as sns
 class Distribution:
     """A model for discrete random variables where outcomes are numeric"""
 
-    def __init__(self, type='discrete', **kwargs):
+    def __init__(self, type='discrete', dist=None, **kwargs):
         """
         Construct the distribution
         :param type: Specifies if the distribution is discrete, normal or uniform
         """
-        if type == 'discrete':
-            self.dist = copy.deepcopy(kwargs['dist'])
+        if type == 'discrete' and dist is not None:
+            self.dist = copy.deepcopy(dist)
 
         elif type == 'normal':
             self.dist = cont.norm_dist(mean=kwargs['mean'], sd=kwargs['sd'], bin_count=kwargs['bins'], val_count=1000)
@@ -183,22 +183,9 @@ class Distribution:
         :return: the standard deviation of the distribution
         """
         var = 0
+        ex = self.ex_val()
 
-        for x in self.dist.keys():
-            var += ((x-self.ex_val())**2)/len(self.dist)
+        for x, p in self.dist.items():
+            var += p * ((x-ex)**2)
 
         return math.sqrt(var)
-
-
-def main():
-    # assigned X to be this distribution
-    X = Distribution(dist={1: 0.60, 3: 0.40})
-    Y = Distribution(dist={0: 0.20, 2: 0.50, 5: 0.30})
-
-    Z = Distribution(type='normal', mean=3, sd=2, bins=5)
-    print(Z)
-
-
-# only run when drv is main file
-if __name__ == '__main__':
-    main()

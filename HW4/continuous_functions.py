@@ -15,12 +15,11 @@ def uni_dist(a, b, bins):
     :return dist: approximated discrete distribution"""
 
     dist = defaultdict()
-    prob = 1 / (b - a)   # the probability for each point
 
     values = np.linspace(a, b, bins)   # generate evenly spaced bins
 
     for val in values:
-        dist[val] = prob
+        dist[val] = 1/bins
 
     return dist
 
